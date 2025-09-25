@@ -64,8 +64,8 @@ class BooleanRetrieval:
 
     def boolean_search(self, query):
         query_terms = query.lower().split()
-        results = set()  # Initialize as empty set to accumulate results
-        current_set = None  # Current set to handle 'or' logic
+        results = set()  
+        current_set = None  
 
         i = 0
         while i < len(query_terms):
@@ -74,10 +74,10 @@ class BooleanRetrieval:
             if term == 'or':
                 if current_set is not None:
                     results.update(current_set)
-                current_set = None  # Reset current set for the next term
+                current_set = None  
             elif term == 'and':
                 i += 1
-                continue  # 'and' is implicit, move to next term
+                continue  
             elif term == 'not':
                 i += 1
                 if i < len(query_terms):
@@ -85,7 +85,7 @@ class BooleanRetrieval:
                     if not_term in self.index:
                         not_docs = self.index[not_term]
                         if current_set is None:
-                            current_set = set(range(1, len(documents) + 1))  # All doc IDs
+                            current_set = set(range(1, len(documents) + 1))  
                         current_set.difference_update(not_docs)
             else:
                 if term in self.index:
@@ -95,11 +95,10 @@ class BooleanRetrieval:
                     else:
                         current_set.intersection_update(term_docs)
                 else:
-                    current_set = set()  # If the term doesn't exist, it results in an empty set
-
+                    current_set = set()  
             i += 1
 
-        # Update results with the last processed set
+        
         if current_set is not None:
             results.update(current_set)
 
